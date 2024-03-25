@@ -29,7 +29,7 @@ use deltalake_core::{
     storage::ObjectStoreRef,
     DeltaTable, DeltaTableError, ObjectStoreError,
 };
-use deltalake_core::{operations::transaction::TableReference, parquet::format::FileMetaData};
+use deltalake_core::operations::transaction::TableReference;
 use log::{error, info, warn};
 use serde_json::{Number, Value};
 use std::collections::HashMap;
