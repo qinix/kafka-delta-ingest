@@ -20,6 +20,7 @@ use deltalake_core::parquet::{
     format::TimeUnit,
     schema::types::{ColumnDescriptor, SchemaDescriptor},
 };
+use deltalake_core::parquet::{basic::ZstdLevel, format::FileMetaData};
 use deltalake_core::protocol::DeltaOperation;
 use deltalake_core::protocol::SaveMode;
 use deltalake_core::{
@@ -351,7 +352,7 @@ impl DataWriter {
         // Initialize writer properties for the underlying arrow writer
         let writer_properties = WriterProperties::builder()
             // NOTE: Consider extracting config for writer properties and setting more than just compression
-            .set_compression(Compression::SNAPPY)
+            .set_compression(Compression::ZSTD(ZstdLevel::try_new(3).unwrap()))
             .build();
 
         Ok(Self {
@@ -513,7 +514,8 @@ impl DataWriter {
 
         // NOTE: If we add a non-snappy option, file name must change
         let file_name = format!(
-            "part-{}-{}-{}.snappy.parquet",
+            "part-{}-{}-{}.zstd.parquet",
+
             first_part, uuid_part, last_part
         );
 
